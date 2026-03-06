@@ -29,6 +29,12 @@
             width: 100%;
             height: 100%;
             border: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .video-container iframe.ready {
+            opacity: 1;
         }
 
         .click-hint {
@@ -131,8 +137,15 @@
         let isMuted = true;
         let firstClick = true;
 
+        const iframe = document.getElementById('vimeo-player');
+
         player.setVolume(0);
         player.play().catch(() => {});
+
+        player.on('playing', function onFirstFrame() {
+            iframe.classList.add('ready');
+            player.off('playing', onFirstFrame);
+        });
 
         clickHint.addEventListener('click', () => {
             clickHint.classList.add('hidden');
